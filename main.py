@@ -1,5 +1,6 @@
 import json
 import matplotlib.pyplot as plt
+import math
 
 
 def create_pie(traits, trait):
@@ -10,6 +11,22 @@ def create_pie(traits, trait):
 	        shadow=True, startangle=90)
 	ax1.axis('equal')
 	plt.show()
+
+
+def find_groupings(nfts):
+	groupings = {}
+	for name in nfts:
+		if int(nfts[name]) not in groupings.keys():
+			groupings[int(nfts[name])] = 1
+		else:
+			groupings[int(nfts[name])] += 1
+	
+	sorted_groupings = {}
+	for key in sorted(groupings):
+		sorted_groupings[key] = groupings[key]
+
+	return sorted_groupings
+
 
 # Open _metadata
 f = open('_metadata.json')
@@ -42,4 +59,16 @@ for x in data:
 	for attribute in x["attributes"]:
 		trait = traits[attribute["trait_type"]][attribute["value"]]
 		rarity *= trait
-	nfts[x["name"]] = rarity
+	nfts[x["name"]] = abs(math.log(rarity, 10))
+
+generic_values = list(nfts.values())
+generic_values.sort()
+
+# group it for the plot
+groupings = find_groupings(nfts)
+
+plt.bar(range(len(groupings)), list(groupings.values()), align='center')
+plt.xticks(range(len(groupings)), list(groupings.keys()))
+plt.show()
+
+  
