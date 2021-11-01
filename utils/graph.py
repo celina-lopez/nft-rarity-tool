@@ -6,7 +6,7 @@ def create_pie(traits, trait, figure):
 	labels = tuple(traits[trait].keys())
 	sizes = traits[trait].values()
 	fig = plt.figure(num=figure, figsize=(13, 13), dpi=80, facecolor='w', edgecolor='k')
-	patches, text = plt.pie(sizes, colors=COLORS, startangle=90)
+	patches, text = plt.pie(sizes, colors=COLORS, startangle=90, normalize=True)
 	plt.axis('equal')
 	plt.legend(patches, labels, loc="upper center", bbox_to_anchor=(0.5, -0.02))
 	plt.tight_layout()
